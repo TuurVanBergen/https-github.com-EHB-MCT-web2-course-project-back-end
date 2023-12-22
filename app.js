@@ -191,7 +191,7 @@ app.delete('/deleteGallery', async (req, res) => {
 });
 
 // /updateGallery put route, this wil update a gallery.
-//de updateOne() heb ik op onderstaande link gevonden.
+//de updateOne() en de $set heb ik op onderstaande link gevonden.
 // https://www.mongodb.com/docs/manual/reference/method/db.collection.updateOne/
 app.put('/updateGallery', async(req, res) => {
     let database;
