@@ -4,6 +4,10 @@ const cors = require('cors');
 const {MongoClient} = require('mongodb');
 const {v4: uuidv4} = require('uuid')
 
+//deze video's zijn algemeen over het maken van een backend, en gaan dus over verschillende delen in het document
+// https://app.pluralsight.com/library/courses/nodejs-express-web-applications-building/table-of-contents
+// https://www.youtube.com/watch?v=kUZl7usU6_U
+
 app.use(express.urlencoded({extended:false}));
 app.use(cors());
 app.use(express.json())
@@ -24,6 +28,7 @@ async function getDatabase() {
 }
 
 // /Artist Get route, this route gets the data out of the db, searches for a sepcific document. after that it sends a response wit that document.
+// https://expressjs.com/en/starter/basic-routing.html
 app.get("/Artist", async(req,res)=>{
     let database;
     try{
@@ -108,6 +113,8 @@ app.post('/addGallery', async (request, response) => {
         const galleriesCollection = await database.collection('galleries');
 
         //This if statement ensures that there can only be a maximum of 10 documents.
+        //de countDocuments() heb ik op onderstaande link gevonden.
+        // https://www.mongodb.com/docs/manual/reference/method/db.collection.countDocuments/
         if(await galleriesCollection.countDocuments() >=10){
             return response.status(400).send({ error: 'Maximum galleries reached.' });
         }
@@ -125,9 +132,13 @@ app.post('/addGallery', async (request, response) => {
         }
 
         const newGallery = request.body;
+        //info over uuid heb ik op onderstaande link gevonden
+        // https://www.mongodb.com/docs/manual/reference/method/UUID/
         newGallery.uuid = uuidv4();
 
-        //insert a new gallery
+        //insert a new gallery.
+        //de insert functie heb ik van onderstaande brond
+        // https://www.mongodb.com/docs/manual/crud/
         await galleriesCollection.insertOne(newGallery);
 
         return response.send({ message: 'Gallery added successfully!' });
@@ -143,6 +154,8 @@ app.post('/addGallery', async (request, response) => {
 });
 
 // /deleteGallery delete route, this wil delete a gallery.
+//de deleteOne functie heb ik gevonden op onderstaande link.
+// https://www.mongodb.com/docs/drivers/node/current/usage-examples/deleteOne/
 app.delete('/deleteGallery', async (req, res) => {
     let database;
     try {
@@ -178,6 +191,8 @@ app.delete('/deleteGallery', async (req, res) => {
 });
 
 // /updateGallery put route, this wil update a gallery.
+//de updateOne() heb ik op onderstaande link gevonden.
+// https://www.mongodb.com/docs/manual/reference/method/db.collection.updateOne/
 app.put('/updateGallery', async(req, res) => {
     let database;
     try {
